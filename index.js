@@ -18,11 +18,11 @@ client.once(Events.ClientReady, _client => {
 client.on(Events.MessageCreate, async msg => {
     if (msg.author.bot) return;
 
-    if (msg.content.includes('has beethoven released yet')) {
+    if (msg.content.includes('<@1318019987730071562>')) {
         getToken().then(response => {
             getLatestAlbum(response.access_token).then(album => {
                 if(isWithinThirtyDays(Date.parse(album.items[0].release_date))) {
-                    msg.channel.send(`yes, beethovens latest album is ${album.items[0].name}, released on ${album.items[0].release_date}`)
+                    msg.channel.send(`yes, beethovens latest album is \`${album.items[0].name}\`, released on \`${album.items[0].release_date}\``)
                 }
                 else {
                     msg.channel.send('nah not yet')
