@@ -25,7 +25,7 @@ export async function getToken() {
             throw new Error(`error: ${response.status}`);
         }
 
-        json = await response.json();
+        let json = await response.json();
         token = json.access_token;
         validUntil = Date.now() + (json.expires_in * 1000);
     }
