@@ -23,7 +23,8 @@ async function getToken() {
 }
 
 async function getLatestAlbum(access_token) {
-    const response = await fetch('https://api.spotify.com/v1/artists/2wOqMjp9TyABvtHdOSOTUS/albums?include_groups=album%2Csingle&market=US&limit=1', {
+    // get singles cuz the albums are a bunch of different artists and stuff i think
+    const response = await fetch('https://api.spotify.com/v1/artists/2wOqMjp9TyABvtHdOSOTUS/albums?include_groups=single&market=AU&limit=1', {
         method: 'GET',
         headers: { 'Authorization': 'Bearer ' + access_token },
     })
@@ -35,8 +36,15 @@ async function getLatestAlbum(access_token) {
     return response.json()
 }
 
+function isWithinThirtyDays(date) {
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+    return date >= thirtyDaysAgo
+}
+
 getToken().then(response => {
     getLatestAlbum(response.access_token).then(album => {
-        console.log(album)
+        console.log(isWithinThirtyDays(Date.parse(album.items[0].release_date)))
     }).catch((err) => { console.log(err); });
 }).catch((err) => { console.log(err); });
