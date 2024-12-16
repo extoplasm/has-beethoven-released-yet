@@ -1,5 +1,7 @@
 import { getToken, getLatestAlbum, isWithinThirtyDays } from './src/spotify.js';
-import { Client, Events, GatewayIntentBits } from 'discord.js'
+import { Client, Events, GatewayIntentBits } from 'discord.js';
+import 'dotenv/config';
+
 const client = new Client({ 
     presence: { activities: [{ name: "wondering when beethoven will release", type: "LISTENING"}], status: "idle"}, 
     intents: [ 
@@ -8,11 +10,9 @@ const client = new Client({
         GatewayIntentBits.MessageContent,
     ]
 });
-import { configDotenv } from 'dotenv';
-configDotenv()
 
 client.once(Events.ClientReady, _client => {
-    console.log('logged in')
+    console.log('logged in');
 })
 
 client.on(Events.MessageCreate, async msg => {
@@ -20,20 +20,20 @@ client.on(Events.MessageCreate, async msg => {
 
     if (msg.mentions.has(client.user)) {
         try {
-            const tokenResponse = await getToken();
-            const album = await getLatestAlbum(tokenResponse.access_token);
+            const token = await getToken();
+            const album = await getLatestAlbum(token);
             if(isWithinThirtyDays(Date.parse(album.items[0].release_date))) {
-                msg.channel.send(`yes, beethovens latest album is \`${album.items[0].name}\`, released on <t:${Math.floor(Date.parse(album.items[0].release_date)/1000)}:D>`)
+                msg.channel.send(`yes, beethovens latest album is \`${album.items[0].name}\`, released on <t:${Math.floor(Date.parse(album.items[0].release_date)/1000)}:D>`);
             }
             else {
-                msg.channel.send('nah not yet')
+                msg.channel.send('nah not yet');
             }
         }
         catch(err) {
-            console.error(err)
+            console.error(err);
         }
     }
 })
 
-console.log('logging in')
-client.login(process.env.token)
+console.log('logging in');
+client.login(process.env.token);
