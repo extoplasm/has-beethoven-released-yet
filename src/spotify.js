@@ -29,7 +29,7 @@ export async function getToken() {
         token = json.access_token;
         validUntil = Date.now() + (json.expires_in * 1000);
     }
-    
+
     return token;
 }
 
@@ -50,7 +50,7 @@ export async function getLatestAlbum(access_token) {
 export function isWithinThirtyDays(date) {
     const thirtyDaysAgo = new Date();
     // yea this is a bit confusing, it just sets the thirtydaysago date (which is the current date) to itself but thirty days ago iykwim
-    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30); 
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
     return date >= thirtyDaysAgo
 }
