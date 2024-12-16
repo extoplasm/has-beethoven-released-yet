@@ -18,17 +18,20 @@ client.once(Events.ClientReady, _client => {
 client.on(Events.MessageCreate, async msg => {
     if (msg.author.bot) return;
 
-    if (msg.content.includes('<@1318019987730071562>')) {
-        getToken().then(response => {
-            getLatestAlbum(response.access_token).then(album => {
-                if(isWithinThirtyDays(Date.parse(album.items[0].release_date))) {
-                    msg.channel.send(`yes, beethovens latest album is \`${album.items[0].name}\`, released on \`${album.items[0].release_date}\``)
-                }
-                else {
-                    msg.channel.send('nah not yet')
-                }
-            }).catch((err) => { console.log(err); });
-        }).catch((err) => { console.log(err); });
+    if (msg.mentions.has(client.user)) {
+        try {
+            const tokenResponse = await getToken();
+            const album = await getLatestAlbum(tokenResponse.access_token);
+            if(isWithinThirtyDays(Date.parse(album.items[0].release_date))) {
+                msg.channel.send(`yes, beethovens latest album is \`${album.items[0].name}\`, released on <t:${Math.floor(Date.parse(album.items[0].release_date)/1000)}:D>`)
+            }
+            else {
+                msg.channel.send('nah not yet')
+            }
+        }
+        catch(err) {
+            console.error(err)
+        }
     }
 })
 
