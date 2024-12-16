@@ -12,22 +12,22 @@ export async function getToken() {
     if (!token || !validUntil || Date.now() > validUntil) {
         const response = await fetch('https://accounts.spotify.com/api/token', {
             method: 'POST',
-    	    body: new URLSearchParams({
-    	        'grant_type': 'client_credentials',
-    	    }),
-    	    headers: {
-    	        'Content-Type': 'application/x-www-form-urlencoded',
-    	        'Authorization': 'Basic ' + (Buffer.from(client_id + ':' + client_secret).toString('base64')),
-    	    },
-    	});	
+            body: new URLSearchParams({
+                'grant_type': 'client_credentials',
+            }),
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Authorization': 'Basic ' + (Buffer.from(client_id + ':' + client_secret).toString('base64')),
+            },
+        });
 
         if (!response.ok) {
-    	    throw new Error(`error: ${response.status}`);
-    	}
-    	
-    	json = await response.json();
-    	token = json.access_token;
-    	validUntil = Date.now() + (json.expires_in * 1000);
+            throw new Error(`error: ${response.status}`);
+        }
+
+        json = await response.json();
+        token = json.access_token;
+        validUntil = Date.now() + (json.expires_in * 1000);
     }
     
     return token;
